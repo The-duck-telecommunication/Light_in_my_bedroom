@@ -581,7 +581,7 @@ public void function_shutdown ()
 public void function_enviarRGB ()
 {
   String _string = "RGB(" + str(R) + "," + str(G) + "," + str(B) + ")";
-  println(_string);
+  //println(_string);
 
   openURL(_string);
 }
