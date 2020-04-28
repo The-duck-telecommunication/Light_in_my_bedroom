@@ -1,3 +1,13 @@
+#include <Arduino.h>
+#include <ESP8266WiFi.h>
+#include <ArduinoOTA.h>
+#include <Wire.h>
+#include "RTClib.h"
+
+RTC_DS3231 rtc;
+char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
+DateTime now;
+
 int led_red = 14,
     led_gre = 12,
     led_blu = 13;
@@ -10,10 +20,6 @@ bool nightMode = false;
 float tempo_salve, tempo_left;
 float tempo_max = 3600000; //1h => 3600000
 
-#include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ArduinoOTA.h>
-
 const char* ssid = "h'(x)";
 const char* password = "T5e5L0e9C7o7M0u2N7i4C4a0C6o4E0s";
 
@@ -23,6 +29,9 @@ String header;
 void setup()
 {
   Serial.begin(115200);
+
+  Wire.begin();
+  rtc.begin();
 
   WiFi.begin(ssid, password);
 
@@ -74,11 +83,18 @@ void setup()
     else if (error == OTA_END_ERROR) Serial.println("Falha no Fim");
   });
   ArduinoOTA.begin();
+
+  if(rtc.lostPower())
+  {
+    Serial.println("DS3231 OK!");
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
 }
 
 void loop()
 {
   ArduinoOTA.handle();
+  coletar_hora();
 
   wifi();
 
@@ -124,7 +140,26 @@ void loop()
 
 
 
+void coletar_hora ()
+{
+  now = rtc.now();
 
+  Serial.print("Data: "); //IMPRIME O TEXTO NO MONITOR SERIAL
+  Serial.print(now.day(), DEC); //IMPRIME NO MONITOR SERIAL O DIA
+  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.month(), DEC); //IMPRIME NO MONITOR SERIAL O MÊS
+  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.year(), DEC); //IMPRIME NO MONITOR SERIAL O ANO
+  Serial.print(" / Dia: "); //IMPRIME O TEXTO NA SERIAL
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]); //IMPRIME NO MONITOR SERIAL O DIA
+  Serial.print(" / Horas: "); //IMPRIME O TEXTO NA SERIAL
+  Serial.print(now.hour()); //IMPRIME NO MONITOR SERIAL A HORA
+  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.minute(), DEC); //IMPRIME NO MONITOR SERIAL OS MINUTOS
+  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.second(), DEC); //IMPRIME NO MONITOR SERIAL OS SEGUNDOS
+  Serial.println(); //QUEBRA DE LINHA NA SERIAL
+}
 
 void wifi ()
 {
@@ -273,19 +308,19 @@ void wifi ()
       B = B_aux.toInt();
 
       Serial.print("index: ");
-      Serial.print(header.indexOf("GET /RGB("));Serial.print(";");
-      Serial.print(R_index);Serial.print(";");
-      Serial.print(G_index);Serial.print(";");
+      Serial.print(header.indexOf("GET /RGB(")); Serial.print(";");
+      Serial.print(R_index); Serial.print(";");
+      Serial.print(G_index); Serial.print(";");
       Serial.println(B_index);
 
       Serial.print("aux: ");
-      Serial.print(R_aux);Serial.print(";");
-      Serial.print(G_aux);Serial.print(";");
+      Serial.print(R_aux); Serial.print(";");
+      Serial.print(G_aux); Serial.print(";");
       Serial.println(B_aux);
 
       Serial.print("value: ");
-      Serial.print(R);Serial.print(";");
-      Serial.print(G);Serial.print(";");
+      Serial.print(R); Serial.print(";");
+      Serial.print(G); Serial.print(";");
       Serial.println(B);
 
       cores_RGB(R, G, B);
@@ -325,9 +360,9 @@ String all_html ()
   _html += "}";
 
   _html += ".btn-group2 button {";
-    _html += "background-color: RGB(";
-    _html += R; _html += ","; _html += G; _html += ","; _html += B;
-    _html += ");";
+  _html += "background-color: RGB(";
+  _html += R; _html += ","; _html += G; _html += ","; _html += B;
+  _html += ");";
   _html += "border: 1px solid green; ";
   _html += "color: white;";
   _html += "padding: 10px 24px;";
@@ -448,7 +483,7 @@ String all_html ()
       // _html += "Min ";
       // _html += String(s);
       // _html += "s ";
-      _html += "time left: " + String((tempo_max - tempo_left)/1000) + "s";
+      _html += "time left: " + String((tempo_max - tempo_left) / 1000) + "s";
 
       // Serial.print("hour: ");
       // Serial.print(h);
@@ -470,14 +505,14 @@ String all_html ()
 
   _html += "<div class=\"slidecontainer\">";
   _html += "<input type=\"range\" min=\"0\" max=\"255\" value=\"";
-    _html += R;
-    _html +="\" class=\"slider\" id=\"myRed\">";
+  _html += R;
+  _html += "\" class=\"slider\" id=\"myRed\">";
   _html += "<input type=\"range\" min=\"0\" max=\"255\" value=\"";
-    _html += G;
-    _html += "\" class=\"slider\" id=\"myGre\">";
+  _html += G;
+  _html += "\" class=\"slider\" id=\"myGre\">";
   _html += "<input type=\"range\" min=\"0\" max=\"255\" value=\"";
-    _html += B;
-    _html += "\" class=\"slider\" id=\"myBlu\">";
+  _html += B;
+  _html += "\" class=\"slider\" id=\"myBlu\">";
   _html += "</div>";
 
   _html += "<p>RGB (<a id=\"valueRed\"></a>, <span id=\"valueGre\"></span>, <span id=\"valueBlu\"></span>)</p>";
@@ -726,7 +761,11 @@ void shunt_down_time ()
   tempo_left = millis() - tempo_salve;
   if (tempo_max < tempo_left)
   {
-    shotdowm_led();
+    if((now.hour() == 5) || (now.hour() == 6))
+      amarelo ();
+    else
+      shotdowm_led();
+
     Serial.println("acabooouuuuuuuuuuuuuuu");
   }
 }
