@@ -144,21 +144,21 @@ void coletar_hora ()
 {
   now = rtc.now();
 
-  Serial.print("Data: "); //IMPRIME O TEXTO NO MONITOR SERIAL
-  Serial.print(now.day(), DEC); //IMPRIME NO MONITOR SERIAL O DIA
-  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-  Serial.print(now.month(), DEC); //IMPRIME NO MONITOR SERIAL O MÊS
-  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-  Serial.print(now.year(), DEC); //IMPRIME NO MONITOR SERIAL O ANO
-  Serial.print(" / Dia: "); //IMPRIME O TEXTO NA SERIAL
-  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]); //IMPRIME NO MONITOR SERIAL O DIA
-  Serial.print(" / Horas: "); //IMPRIME O TEXTO NA SERIAL
-  Serial.print(now.hour()); //IMPRIME NO MONITOR SERIAL A HORA
-  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-  Serial.print(now.minute(), DEC); //IMPRIME NO MONITOR SERIAL OS MINUTOS
-  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-  Serial.print(now.second(), DEC); //IMPRIME NO MONITOR SERIAL OS SEGUNDOS
-  Serial.println(); //QUEBRA DE LINHA NA SERIAL
+//  Serial.print("Data: "); //IMPRIME O TEXTO NO MONITOR SERIAL
+//  Serial.print(now.day(), DEC); //IMPRIME NO MONITOR SERIAL O DIA
+//  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+//  Serial.print(now.month(), DEC); //IMPRIME NO MONITOR SERIAL O MÊS
+//  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+//  Serial.print(now.year(), DEC); //IMPRIME NO MONITOR SERIAL O ANO
+//  Serial.print(" / Dia: "); //IMPRIME O TEXTO NA SERIAL
+//  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]); //IMPRIME NO MONITOR SERIAL O DIA
+//  Serial.print(" / Horas: "); //IMPRIME O TEXTO NA SERIAL
+//  Serial.print(now.hour()); //IMPRIME NO MONITOR SERIAL A HORA
+//  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+//  Serial.print(now.minute(), DEC); //IMPRIME NO MONITOR SERIAL OS MINUTOS
+//  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+//  Serial.print(now.second(), DEC); //IMPRIME NO MONITOR SERIAL OS SEGUNDOS
+//  Serial.println(); //QUEBRA DE LINHA NA SERIAL
 }
 
 void wifi ()
