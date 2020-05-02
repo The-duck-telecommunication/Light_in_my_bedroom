@@ -759,10 +759,28 @@ void shunt_down_time ()
   Serial.println(tempo_left);
 
   tempo_left = millis() - tempo_salve;
+
   if (tempo_max < tempo_left)
   {
     if((now.hour() == 5) || (now.hour() == 6))
-      amarelo ();
+    {
+      if(now.hour() == 5)
+        cores_RGB(100, 80, 50);
+      else
+        cores_RGB(255, 220, 200);
+    }
+    else if((now.hour() >= 18) && (now.hour() <= 23))
+    {
+      int _r = map(now.hour(), 18, 23, 150, 5);
+      int _g = map(now.hour(), 18, 23, 200, 10);
+      int _b = map(now.hour(), 18, 23, 130, 0);
+
+      _r = constrain(_r, 5, 150);
+      _g = constrain(_g, 10, 200);
+      _b = constrain(_b, 0, 130);
+
+      cores_RGB(_r, _g, _b);
+    }
     else
       shotdowm_led();
 
