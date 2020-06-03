@@ -765,19 +765,19 @@ void shunt_down_time ()
     if((now.hour() == 5) || (now.hour() == 6))
     {
       if(now.hour() == 5)
-        cores_RGB(100, 80, 50);
+        cores_RGB(60, 50, 30);
       else
-        cores_RGB(255, 220, 200);
+        cores_RGB(150, 130, 100);
     }
     else if((now.hour() >= 18) && (now.hour() <= 23))
     {
-      int _r = map(now.hour(), 18, 23, 150, 5);
-      int _g = map(now.hour(), 18, 23, 200, 10);
-      int _b = map(now.hour(), 18, 23, 130, 0);
+      int _r = map(now.hour(), 18, 23, 80, 4);
+      int _g = map(now.hour(), 18, 23, 60, 3);
+      int _b = map(now.hour(), 18, 23, 40, 0);
 
-      _r = constrain(_r, 5, 150);
-      _g = constrain(_g, 10, 200);
-      _b = constrain(_b, 0, 130);
+      _r = constrain(_r, 4, 80);
+      _g = constrain(_g, 3, 60);
+      _b = constrain(_b, 0, 40);
 
       cores_RGB(_r, _g, _b);
     }
