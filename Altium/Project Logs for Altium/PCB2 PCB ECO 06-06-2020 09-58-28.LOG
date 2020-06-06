@@ -1,0 +1,30 @@
+Removed Pin From Net: NetName=+3v3 Pin=NodeMCU-11
+Removed Pin From Net: NetName=NetClock1_4 Pin=NodeMCU-28
+Removed Pin From Net: NetName=NetClock1_3 Pin=NodeMCU-29
+Removed Pin From Net: NetName=NetFita_led_4 Pin=Q6-2
+Removed Pin From Net: NetName=NetQ1_2 Pin=Q6-3
+Removed Pin From Net: NetName=NetFita_led_3 Pin=Q7-2
+Removed Pin From Net: NetName=NetQ4_2 Pin=Q7-3
+Removed Pin From Net: NetName=NetFita_led_2 Pin=Q8-2
+Removed Pin From Net: NetName=NetQ5_2 Pin=Q8-3
+Removed Member From Class: ClassName=Fita LED Member=Q6
+Removed Member From Class: ClassName=Fita LED Member=Q7
+Removed Member From Class: ClassName=Fita LED Member=Q8
+Added Component: Designator=aliemntação(CN_KRE_2)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+12 Pin=aliemntação-1
+Added Pin To Net: NetName=GND Pin=aliemntação-2
+Added Pin To Net: NetName=+3v3 Pin=NodeMCU-16
+Added Pin To Net: NetName=NetClock1_3 Pin=NodeMCU-28
+Added Pin To Net: NetName=NetClock1_4 Pin=NodeMCU-29
+Added Pin To Net: NetName=NetQ1_2 Pin=R3-2
+Added Pin To Net: NetName=NetQ4_2 Pin=R6-2
+Added Pin To Net: NetName=NetQ5_2 Pin=R9-2
+Added Member To Class: ClassName=Microcontrolador ESP8266 Member=Component aliemntação ?
+Added Room: Name=Botão
+Added Room: Name=Fita LED
+Added Room: Name=Microcontrolador ESP8266
+Added Room: Name=Relay de carga
+Added Room: Name=Relógio digital

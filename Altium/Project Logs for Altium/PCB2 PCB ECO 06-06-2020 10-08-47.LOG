@@ -1,0 +1,11 @@
+Removed Pin From Net: NetName=+3v3 Pin=NodeMCU-11
+Removed Pin From Net: NetName=NetClock1_3 Pin=NodeMCU-28
+Removed Pin From Net: NetName=NetClock1_4 Pin=NodeMCU-29
+Added Pin To Net: NetName=+3v3 Pin=NodeMCU-16
+Added Pin To Net: NetName=NetClock1_4 Pin=NodeMCU-28
+Added Pin To Net: NetName=NetClock1_3 Pin=NodeMCU-29
+Added Room: Name=Botão
+Added Room: Name=Fita LED
+Added Room: Name=Microcontrolador ESP8266
+Added Room: Name=Relay de carga
+Added Room: Name=Relógio digital
