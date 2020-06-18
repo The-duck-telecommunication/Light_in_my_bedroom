@@ -8,9 +8,9 @@ RTC_DS3231 rtc;
 char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
 DateTime now;
 
-int led_red = 14,
+int led_red = 13,
     led_gre = 12,
-    led_blu = 13;
+    led_blu = 14;
 
 int R = 100, G = 125, B = 120;
 

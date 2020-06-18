@@ -1,0 +1,32 @@
+Removed Pin From Net: NetName=+12 Pin=Fita_led-1
+Removed Pin From Net: NetName=+3v3 Pin=NodeMCU-11
+Removed Member From Class: ClassName=Fita LED Member=Fita_led
+Added Component: Designator=CN1(MKDSN02)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Digikey"; Value = "277-5893-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "MKDS"; VariantName = "[No Variations]"
+Added Component: Designator=CN2(MKDSN02)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Digikey"; Value = "277-5893-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "MKDS"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+12 Pin=CN2-1
+Added Pin To Net: NetName=+3v3 Pin=NodeMCU-16
+Added Pin To Net: NetName=NetCN1_1 Pin=CN1-1
+Added Pin To Net: NetName=NetCN1_1 Pin=Q4-2
+Added Pin To Net: NetName=NetCN1_1 Pin=R11-2
+Added Net: Name=NetCN1_1
+Added Pin To Net: NetName=NetCN1_2 Pin=CN1-2
+Added Pin To Net: NetName=NetCN1_2 Pin=Q1-2
+Added Pin To Net: NetName=NetCN1_2 Pin=R10-1
+Added Net: Name=NetCN1_2
+Added Pin To Net: NetName=NetCN2_2 Pin=CN2-2
+Added Pin To Net: NetName=NetCN2_2 Pin=Q5-2
+Added Pin To Net: NetName=NetCN2_2 Pin=R12-2
+Added Net: Name=NetCN2_2
+Added Member To Class: ClassName=Fita LED Member=Component CN1 MKDS
+Added Member To Class: ClassName=Fita LED Member=Component CN2 MKDS
+Added Room: Name=Botão
+Added Room: Name=Fita LED
+Added Room: Name=Microcontrolador ESP8266
+Added Room: Name=Relay de carga
+Added Room: Name=Relógio digital
