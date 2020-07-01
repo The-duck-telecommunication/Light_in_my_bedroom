@@ -16,6 +16,8 @@ int R = 100, G = 125, B = 120;
 
 int set = 4, set_old;
 
+int rele_pin = 2;
+
 bool nightMode = false;
 float tempo_salve, tempo_left;
 float tempo_max = 3600000; //1h => 3600000
@@ -62,7 +64,12 @@ void setup()
   pinMode(led_red, OUTPUT);
   pinMode(led_gre, OUTPUT);
   pinMode(led_blu, OUTPUT);
+  pinMode(rele_pin, OUTPUT);
 
+  digitalWrite(led_red, LOW);
+  digitalWrite(led_gre, LOW);
+  digitalWrite(led_blu, LOW);
+  digitalWrite(rele_pin, LOW);
 
   ArduinoOTA.setHostname("ESP_quarto09");
   ArduinoOTA.onStart([]() {
@@ -89,6 +96,11 @@ void setup()
     Serial.println("DS3231 OK!");
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
+
+  //blink nos reles
+  digitalWrite(rele_pin, HIGH);
+  delay(200);
+  digitalWrite(rele_pin, LOW);
 }
 
 void loop()
