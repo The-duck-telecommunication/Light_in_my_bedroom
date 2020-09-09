@@ -1,40 +1,58 @@
+//Bibliotecas
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ArduinoOTA.h>
 #include <Wire.h>
 #include "RTClib.h"
+/***end***/
 
+//RTC
 RTC_DS3231 rtc;
+
 char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
 DateTime now;
+/***end***/
 
+//Pinout LED
 int led_red = 13,
     led_gre = 12,
     led_blu = 14;
 
-int R = 100, G = 125, B = 120;
+int R = 100, G = 125, B = 120; //cor padrão
 
-int set = 4, set_old;
-
+//Pinout relés
 int rele_pin = 2;
+
+int set = 4, set_old; //variaveis para seleção de funções
 
 bool nightMode = false;
 float tempo_salve, tempo_left;
 float tempo_max = 3600000; //1h => 3600000
 
-const char* ssid = "h'(x)";
-const char* password = "T5e5L0e9C7o7M0u2N7i4C4a0C6o4E0s";
+
+//Wifi config
+const char* ssid = "h\"(x)"; //nome da rede wifi
+const char* password = "T5e5L0e9C7o7M0u2N7i4C4a0C6o4E0s"; //senha da rede wifi
 
 WiFiServer server(80);
 String header;
+/***end***/
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200); //baud rate padrão na comunicação serial é 115200
 
-  Wire.begin();
-  rtc.begin();
+  Wire.begin(); //começar conexão I2C
+  rtc.begin(); //começar comunicação com RTC
+  //RTC config
+  if(rtc.lostPower())
+  {
+    Serial.println("DS3231 OK!");
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+  /***end***/
 
+  //conectar na rede Wifi
   WiFi.begin(ssid, password);
 
   pinMode(2, OUTPUT);
@@ -60,7 +78,9 @@ void setup()
   Serial.println(WiFi.localIP());
 
   server.begin();
+  /***end***/
 
+  //Pinout config
   pinMode(led_red, OUTPUT);
   pinMode(led_gre, OUTPUT);
   pinMode(led_blu, OUTPUT);
@@ -70,7 +90,10 @@ void setup()
   digitalWrite(led_gre, LOW);
   digitalWrite(led_blu, LOW);
   digitalWrite(rele_pin, LOW);
+  /***end***/
 
+
+  // OTA config. passar código para esp pelo wifi
   ArduinoOTA.setHostname("ESP_quarto09");
   ArduinoOTA.onStart([]() {
     Serial.println("Inicio...");
@@ -90,12 +113,7 @@ void setup()
     else if (error == OTA_END_ERROR) Serial.println("Falha no Fim");
   });
   ArduinoOTA.begin();
-
-  if(rtc.lostPower())
-  {
-    Serial.println("DS3231 OK!");
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }
+  /***end***/
 
   //blink nos reles
   digitalWrite(rele_pin, HIGH);
