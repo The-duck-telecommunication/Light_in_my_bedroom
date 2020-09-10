@@ -69,10 +69,10 @@ void setup()
       ESP.restart();
   }
 
-  IPAddress ip(192, 168, 1, 25);
+  IPAddress ip(192, 168, 1, 30);
   IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
-  WiFi.config(ip, gateway, subnet);
+  //WiFi.config(ip, gateway, subnet);
 
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
