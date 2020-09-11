@@ -63,9 +63,6 @@ void setup()
   }
 
   #if (ip_fixo)
-  IPAddress ip(192, 168, 1, 25);
-  IPAddress gateway(192, 168, 1, 1);
-  IPAddress subnet(255, 255, 255, 0);
   WiFi.config(ip, gateway, subnet);    //por algum motivo isso não esta funcionando
   #endif
 
@@ -118,10 +115,10 @@ void setup()
 
 void loop()
 {
-  ArduinoOTA.handle();
-  coletar_hora();
+  ArduinoOTA.handle(); //verificar porta OTA
+  coletar_hora(); //atualizar variaveis de horas
 
-  wifi();
+  wifi(); //ver se tem alguem no wifi
 
   if (set == 0)
     shotdowm_led();
@@ -162,10 +159,6 @@ void loop()
   //Serial.println(nightMode);
   delay(50);
 }
-
-
-
-
 
 
 void coletar_hora ()
@@ -326,6 +319,7 @@ void wifi ()
     else if (header.indexOf("GET /buttonN15") >= 0)
     {
       good_morning = !good_morning;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN16") >= 0)
     {
@@ -505,7 +499,13 @@ String all_html ()
 
   _html += "<p><a href=\"/button1\"><button style=\"width:33.3%\" >Pisca pisca</button></a></p>";
   _html += "<p><a href=\"/button2\"><button style=\"width:33.3%\" >Fade</button></a></p>";
-  _html += "<p><a href=\"/buttonN14\"><button style=\"width:33.3%\" >Shut down</button></a></p>";
+
+  _html += "<p><a href=\"/buttonN14\"><button style=\"width:33.3%";
+  if(nightMode)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\" >Shut down</button></a></p>";
 
   if (nightMode)
   {
@@ -517,15 +517,11 @@ String all_html ()
     {
       int h = 0, mi = 0, s = 0, aux = 0;
 
-      //nao sei ainda
+      s = (tempo_max - tempo_left) / 1000;
+      mi = int(s/60);
+      s = int(s%60 * 60/1000);
 
-      // _html += String(h);
-      // _html += "H ";
-      // _html += String(mi);
-      // _html += "Min ";
-      // _html += String(s);
-      // _html += "s ";
-      _html += "time left: " + String((tempo_max - tempo_left) / 1000) + "s";
+      _html += "time left: " + String(mi) + " min " + String(s) + " s";
 
       // Serial.print("hour: ");
       // Serial.print(h);
@@ -541,9 +537,15 @@ String all_html ()
     _html += "<p></p>";
 
 
-  _html += "<p><a href=\"/buttonN15\"><button style=\"width:33.3%\" >OutraA </button></a></p>";
-  _html += "<p><a href=\"/buttonN16\"><button style=\"width:33.3%\" >OutraB </button></a></p>";
-  _html += "<p><a href=\"/buttonN17\"><button style=\"width:33.3%\" >OutraC </button></a></p>";
+  _html += "<p><a href=\"/buttonN15\"><button style=\"width:33.3%";
+  if(good_morning)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\">Morning</button></a></p>";
+
+  _html += "<p><a href=\"/buttonN16\"><button style=\"width:33.3%\" >On/OFF rele </button></a></p>";
+  _html += "<p><a href=\"/buttonN17\"><button style=\"width:33.3%\" >shunt down rele</button></a></p>";
 
   _html += "</div>";
 
@@ -646,6 +648,7 @@ String all_html ()
 
   return _html;
 }
+
 
 
 void fade (int del)
@@ -839,6 +842,14 @@ void good_morning_funcion ()
 {
   if(now.hour() == 5)
   {
-    cores_RGB(200, 200, 255); //condefir a cor
+    int _r = map(now.minute(), 0, 59, 11, 150);
+    int _g = map(now.minute(), 0, 59, 5, 150);
+    int _b = map(now.minute(), 0, 59, 20, 200);
+
+    // _r = constrain(_r, 1, 80);
+    // _g = constrain(_g, 3, 60);
+    // _b = constrain(_b, 0, 40);
+
+    cores_RGB(_r, _g, _b);
   }
 }
