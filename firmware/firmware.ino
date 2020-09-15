@@ -45,6 +45,10 @@ void setup()
   }
   /***end***/
 
+  #if (ip_fixo)
+  WiFi.config(ip, gateway, subnet);    //por algum motivo isso não esta funcionando
+  #endif
+  
   //conectar na rede Wifi
   WiFi.begin(ssid, password);
 
@@ -61,10 +65,6 @@ void setup()
     if (resetar > 500000)
       ESP.restart();
   }
-
-  #if (ip_fixo)
-  WiFi.config(ip, gateway, subnet);    //por algum motivo isso não esta funcionando
-  #endif
 
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());

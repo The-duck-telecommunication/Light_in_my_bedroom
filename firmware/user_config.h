@@ -1,4 +1,4 @@
-#define ip_fixo false
+#define ip_fixo true
 #define print_data false
 #define self_adjust true //pegar horario do pc na hora de enviar código
 
@@ -9,8 +9,6 @@ const char* password = "T5e5L0e9C7o7M0u2N7i4C4a0C6o4E0s"; //senha da rede wifi
 
 IPAddress ip(192, 168, 1, 25);
 IPAddress gateway(192, 168, 1, 1);
-//IPAddress gateway(189, 12, 196, 1);
-//IPAddress subnet(255, 255, 255, 255);
 IPAddress subnet(255, 255, 255, 0);
 
 //Pinout LED
