@@ -2,6 +2,8 @@
 #define print_data false
 #define self_adjust true //pegar horario do pc na hora de enviar código
 
+#define fade_time 200
+
 char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
 
 const char* ssid = "h\"(x)"; //nome da rede wifi

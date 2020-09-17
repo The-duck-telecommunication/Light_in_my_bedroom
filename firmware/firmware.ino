@@ -48,7 +48,7 @@ void setup()
   #if (ip_fixo)
   WiFi.config(ip, gateway, subnet);    //por algum motivo isso não esta funcionando
   #endif
-  
+
   //conectar na rede Wifi
   WiFi.begin(ssid, password);
 
@@ -125,7 +125,7 @@ void loop()
   else if (set == 1)
     combination();
   else if (set == 2)
-    fade(100);
+    fade(fade_time);
   else if (set == 3)
     vermelhao();
   else if (set == 4)
@@ -157,7 +157,7 @@ void loop()
 
   //Serial.print ("valor desse trem aqui: ");
   //Serial.println(nightMode);
-  delay(50);
+  //delay(50);
 }
 
 
@@ -226,84 +226,100 @@ void wifi ()
       set_old = set;
       set = 0;
       nightMode = false;
+
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button1") >= 0)
     {
       set_old = set;
       set = 1;
       nightMode = false;
+
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button2") >= 0)
     {
       set_old = set;
       set = 2;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button3") >= 0)
     {
       set_old = set;
       set = 3;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button4") >= 0)
     {
       set_old = set;
       set = 4;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button5") >= 0)
     {
       set_old = set;
       set = 5;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button6") >= 0)
     {
       set_old = set;
       set = 6;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button7") >= 0)
     {
       set_old = set;
       set = 7;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button8") >= 0)
     {
       set_old = set;
       set = 8;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button9") >= 0)
     {
       set_old = set;
       set = 9;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN10") >= 0)
     {
       set_old = set;
       set = 10;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN11") >= 0)
     {
       set_old = set;
       set = 11;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN12") >= 0)
     {
       set_old = set;
       set = 12;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN13") >= 0)
     {
       set_old = set;
       set = 13;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN14") >= 0)
     {
@@ -497,15 +513,26 @@ String all_html ()
   _html += "<p style=\"text-align: center\">Funcoes:</p>";
   _html += "<div class=\"btn-group\" style=\"width:100%\">";
 
-  _html += "<p><a href=\"/button1\"><button style=\"width:33.3%\" >Pisca pisca</button></a></p>";
-  _html += "<p><a href=\"/button2\"><button style=\"width:33.3%\" >Fade</button></a></p>";
+  _html += "<p><a href=\"/button1\"><button style=\"width:33.3%";
+  if (set == 1)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\" >Piscar</button></a></p>";
+
+  _html += "<p><a href=\"/button2\"><button style=\"width:33.3%";
+  if(set == 2)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\" >Fade</button></a></p>";
 
   _html += "<p><a href=\"/buttonN14\"><button style=\"width:33.3%";
   if(nightMode)
   {
     _html += ";background-color: #6d912a;";
   }
-  _html += "\" >Shut down</button></a></p>";
+  _html += "\" >Sleep LED</button></a></p>";
 
   if (nightMode)
   {
@@ -519,9 +546,15 @@ String all_html ()
 
       s = (tempo_max - tempo_left) / 1000;
       mi = int(s/60);
-      s = int(s%60 * 60/1000);
 
-      _html += "time left: " + String(mi) + " min " + String(s) + " s";
+      Serial.print("mi: "); Serial.print(mi);
+      Serial.print(" ss: "); Serial.print(s);
+
+      s = (s/60 - mi)*60;
+
+      Serial.print(" s: "); Serial.println(s);
+
+      _html += "time left: " + String(mi) + " min ";// + String(s) + " s";
 
       // Serial.print("hour: ");
       // Serial.print(h);
@@ -705,6 +738,8 @@ bool breck_for ()
 
 void combination ()
 {
+  shotdowm_led();
+
   digitalWrite(led_red, HIGH);
   wifi();
   delay(500);
@@ -723,8 +758,6 @@ void combination ()
   digitalWrite(led_gre, LOW);
   wifi();
   delay(500);
-
-  shotdowm_led();
 }
 
 void cores_RGB (int R_aux, int G_aux, int B_aux)
@@ -803,12 +836,12 @@ void shotdowm_led()
 
 void shunt_down_time ()
 {
-  Serial.println("esta entrando aqui");
+  delay(100);
+
+  tempo_left = millis() - tempo_salve;
 
   Serial.print("tempo_left: ");
   Serial.println(tempo_left);
-
-  tempo_left = millis() - tempo_salve;
 
   if (tempo_max < tempo_left)
   {
