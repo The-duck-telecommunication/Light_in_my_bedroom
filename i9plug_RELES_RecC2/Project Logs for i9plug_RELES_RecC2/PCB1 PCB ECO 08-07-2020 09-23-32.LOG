@@ -1,0 +1,102 @@
+Added Component: Designator=*(LED_AXIAL_3MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=*(LED_AXIAL_3MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=*(LED_AXIAL_3MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=*(LED_AXIAL_3MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=J1(Pin Header 5 Ways)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer 1"; Value = "Irwin Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer 1 PN"; Value = "M20-9992046"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Notes"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=R1(RES_PTH_7.62MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=R2(RES_PTH_7.62MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=R3(RES_PTH_7.62MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=R4(RES_PTH_7.62MM)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Component: Designator=RL1(DIV_RELE_5551)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "RELEICR5551"; VariantName = "[No Variations]"
+Added Component: Designator=RL2(DIV_RELE_5551)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "RELEICR5551"; VariantName = "[No Variations]"
+Added Component: Designator=RL3(DIV_RELE_5551)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "RELEICR5551"; VariantName = "[No Variations]"
+Added Component: Designator=RL4(DIV_RELE_5551)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "RELEICR5551"; VariantName = "[No Variations]"
+Added Component: Designator=X1(HEADER_1X1)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Validação"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "?"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=Fase Pin=RL1-1
+Added Pin To Net: NetName=Fase Pin=RL2-1
+Added Pin To Net: NetName=Fase Pin=RL3-1
+Added Pin To Net: NetName=Fase Pin=RL4-1
+Added Pin To Net: NetName=Fase Pin=X1-1
+Added Net: Name=Fase
+Added Pin To Net: NetName=GND Pin=J1-1
+Added Pin To Net: NetName=GND Pin=R1-1
+Added Pin To Net: NetName=GND Pin=R2-1
+Added Pin To Net: NetName=GND Pin=R3-1
+Added Pin To Net: NetName=GND Pin=R4-1
+Added Pin To Net: NetName=GND Pin=RL1-5
+Added Pin To Net: NetName=GND Pin=RL2-5
+Added Pin To Net: NetName=GND Pin=RL3-5
+Added Pin To Net: NetName=GND Pin=RL4-5
+Added Net: Name=GND
+Added Pin To Net: NetName=Net*_K Pin=*-K
+Added Pin To Net: NetName=Net*_K Pin=R3-2
+Added Net: Name=Net*_K
+Added Pin To Net: NetName=T1_fase Pin=RL1-3
+Added Net: Name=T1_fase
+Added Pin To Net: NetName=T2_fase Pin=RL2-3
+Added Net: Name=T2_fase
+Added Pin To Net: NetName=T3_fase Pin=RL3-3
+Added Net: Name=T3_fase
+Added Pin To Net: NetName=T4_fase Pin=RL4-3
+Added Net: Name=T4_fase
+Added Pin To Net: NetName=Tomada1 Pin=*-A
+Added Pin To Net: NetName=Tomada1 Pin=J1-2
+Added Pin To Net: NetName=Tomada1 Pin=RL1-4
+Added Net: Name=Tomada1
+Added Pin To Net: NetName=Tomada2 Pin=*-A
+Added Pin To Net: NetName=Tomada2 Pin=J1-3
+Added Pin To Net: NetName=Tomada2 Pin=RL2-4
+Added Net: Name=Tomada2
+Added Pin To Net: NetName=Tomada3 Pin=*-A
+Added Pin To Net: NetName=Tomada3 Pin=J1-4
+Added Pin To Net: NetName=Tomada3 Pin=RL3-4
+Added Net: Name=Tomada3
+Added Pin To Net: NetName=Tomada4 Pin=*-A
+Added Pin To Net: NetName=Tomada4 Pin=J1-5
+Added Pin To Net: NetName=Tomada4 Pin=RL4-4
+Added Net: Name=Tomada4
+Added Class: Name=rele_Sheet
+Added Room: Name=rele_Sheet
