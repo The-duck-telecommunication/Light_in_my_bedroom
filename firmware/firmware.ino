@@ -1,40 +1,55 @@
+//Bibliotecas
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ArduinoOTA.h>
 #include <Wire.h>
 #include "RTClib.h"
+/***end***/
 
+//RTC
 RTC_DS3231 rtc;
-char daysOfTheWeek[7][12] = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
+
 DateTime now;
+/***end***/
 
-int led_red = 13,
-    led_gre = 12,
-    led_blu = 14;
-
-int R = 100, G = 125, B = 120;
-
-int set = 4, set_old;
-
-int rele_pin = 2;
+int set = 4, set_old; //variaveis para seleção de funções
 
 bool nightMode = false;
+bool good_morning = false;
 float tempo_salve, tempo_left;
-float tempo_max = 3600000; //1h => 3600000
 
-const char* ssid = "h'(x)";
-const char* password = "T5e5L0e9C7o7M0u2N7i4C4a0C6o4E0s";
 
+//Wifi config
 WiFiServer server(80);
 String header;
+/***end***/
+
+#include "user_config.h"
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200); //baud rate padrão na comunicação serial é 115200
 
-  Wire.begin();
-  rtc.begin();
+  Wire.begin(); //começar conexão I2C
+  rtc.begin(); //começar comunicação com RTC
+  //RTC config
+  if(rtc.lostPower())
+  {
+    Serial.println("DS3231 OK!");
+    #if (self_adjust)
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
+    //January 21, 2014 at 3am you would call:
+    //rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+    #endif
+  }
+  /***end***/
+
+  #if (ip_fixo)
+  WiFi.config(ip, gateway, subnet);    //por algum motivo isso não esta funcionando
+  #endif
+
+  //conectar na rede Wifi
   WiFi.begin(ssid, password);
 
   pinMode(2, OUTPUT);
@@ -51,16 +66,13 @@ void setup()
       ESP.restart();
   }
 
-  IPAddress ip(192, 168, 1, 25);
-  IPAddress gateway(192, 168, 1, 1);
-  IPAddress subnet(255, 255, 255, 0);
-  WiFi.config(ip, gateway, subnet);
-
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
   server.begin();
+  /***end***/
 
+  //Pinout config
   pinMode(led_red, OUTPUT);
   pinMode(led_gre, OUTPUT);
   pinMode(led_blu, OUTPUT);
@@ -70,7 +82,10 @@ void setup()
   digitalWrite(led_gre, LOW);
   digitalWrite(led_blu, LOW);
   digitalWrite(rele_pin, LOW);
+  /***end***/
 
+
+  // OTA config. passar código para esp pelo wifi
   ArduinoOTA.setHostname("ESP_quarto09");
   ArduinoOTA.onStart([]() {
     Serial.println("Inicio...");
@@ -90,12 +105,7 @@ void setup()
     else if (error == OTA_END_ERROR) Serial.println("Falha no Fim");
   });
   ArduinoOTA.begin();
-
-  if(rtc.lostPower())
-  {
-    Serial.println("DS3231 OK!");
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }
+  /***end***/
 
   //blink nos reles
   digitalWrite(rele_pin, HIGH);
@@ -105,17 +115,17 @@ void setup()
 
 void loop()
 {
-  ArduinoOTA.handle();
-  coletar_hora();
+  ArduinoOTA.handle(); //verificar porta OTA
+  coletar_hora(); //atualizar variaveis de horas
 
-  wifi();
+  wifi(); //ver se tem alguem no wifi
 
   if (set == 0)
     shotdowm_led();
   else if (set == 1)
     combination();
   else if (set == 2)
-    fade(100);
+    fade(fade_time);
   else if (set == 3)
     vermelhao();
   else if (set == 4)
@@ -142,35 +152,36 @@ void loop()
   if (nightMode)
     shunt_down_time();
 
+  if (good_morning)
+    good_morning_funcion();
+
   //Serial.print ("valor desse trem aqui: ");
   //Serial.println(nightMode);
-  delay(50);
+  //delay(50);
 }
-
-
-
-
 
 
 void coletar_hora ()
 {
   now = rtc.now();
 
-//  Serial.print("Data: "); //IMPRIME O TEXTO NO MONITOR SERIAL
-//  Serial.print(now.day(), DEC); //IMPRIME NO MONITOR SERIAL O DIA
-//  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-//  Serial.print(now.month(), DEC); //IMPRIME NO MONITOR SERIAL O MÊS
-//  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-//  Serial.print(now.year(), DEC); //IMPRIME NO MONITOR SERIAL O ANO
-//  Serial.print(" / Dia: "); //IMPRIME O TEXTO NA SERIAL
-//  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]); //IMPRIME NO MONITOR SERIAL O DIA
-//  Serial.print(" / Horas: "); //IMPRIME O TEXTO NA SERIAL
-//  Serial.print(now.hour()); //IMPRIME NO MONITOR SERIAL A HORA
-//  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-//  Serial.print(now.minute(), DEC); //IMPRIME NO MONITOR SERIAL OS MINUTOS
-//  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
-//  Serial.print(now.second(), DEC); //IMPRIME NO MONITOR SERIAL OS SEGUNDOS
-//  Serial.println(); //QUEBRA DE LINHA NA SERIAL
+  #if (print_data)
+  Serial.print("Data: "); //IMPRIME O TEXTO NO MONITOR SERIAL
+  Serial.print(now.day(), DEC); //IMPRIME NO MONITOR SERIAL O DIA
+  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.month(), DEC); //IMPRIME NO MONITOR SERIAL O MÊS
+  Serial.print('/'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.year(), DEC); //IMPRIME NO MONITOR SERIAL O ANO
+  Serial.print(" / Dia: "); //IMPRIME O TEXTO NA SERIAL
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]); //IMPRIME NO MONITOR SERIAL O DIA
+  Serial.print(" / Horas: "); //IMPRIME O TEXTO NA SERIAL
+  Serial.print(now.hour()); //IMPRIME NO MONITOR SERIAL A HORA
+  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.minute(), DEC); //IMPRIME NO MONITOR SERIAL OS MINUTOS
+  Serial.print(':'); //IMPRIME O CARACTERE NO MONITOR SERIAL
+  Serial.print(now.second(), DEC); //IMPRIME NO MONITOR SERIAL OS SEGUNDOS
+  Serial.println(); //QUEBRA DE LINHA NA SERIAL
+  #endif
 }
 
 void wifi ()
@@ -215,84 +226,100 @@ void wifi ()
       set_old = set;
       set = 0;
       nightMode = false;
+
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button1") >= 0)
     {
       set_old = set;
       set = 1;
       nightMode = false;
+
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button2") >= 0)
     {
       set_old = set;
       set = 2;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button3") >= 0)
     {
       set_old = set;
       set = 3;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button4") >= 0)
     {
       set_old = set;
       set = 4;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button5") >= 0)
     {
       set_old = set;
       set = 5;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button6") >= 0)
     {
       set_old = set;
       set = 6;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button7") >= 0)
     {
       set_old = set;
       set = 7;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button8") >= 0)
     {
       set_old = set;
       set = 8;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /button9") >= 0)
     {
       set_old = set;
       set = 9;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN10") >= 0)
     {
       set_old = set;
       set = 10;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN11") >= 0)
     {
       set_old = set;
       set = 11;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN12") >= 0)
     {
       set_old = set;
       set = 12;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN13") >= 0)
     {
       set_old = set;
       set = 13;
       nightMode = false;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
     }
     else if (header.indexOf("GET /buttonN14") >= 0)
     {
@@ -304,6 +331,19 @@ void wifi ()
 
       //Serial.print ("Entrou aquiiiiiiiiiii valor desse trem aqui: ");
       //Serial.println(nightMode);
+    }
+    else if (header.indexOf("GET /buttonN15") >= 0)
+    {
+      good_morning = !good_morning;
+      client.println("<script>location.href = \"http://192.168.1.25\";</script>");
+    }
+    else if (header.indexOf("GET /buttonN16") >= 0)
+    {
+
+    }
+    else if (header.indexOf("GET /buttonN17") >= 0)
+    {
+
     }
     else if (header.indexOf("GET /RGB(") >= 0)
     {
@@ -473,9 +513,26 @@ String all_html ()
   _html += "<p style=\"text-align: center\">Funcoes:</p>";
   _html += "<div class=\"btn-group\" style=\"width:100%\">";
 
-  _html += "<p><a href=\"/button1\"><button style=\"width:33.3%\" >Pisca pisca</button></a></p>";
-  _html += "<p><a href=\"/button2\"><button style=\"width:33.3%\" >Fade</button></a></p>";
-  _html += "<p><a href=\"/buttonN14\"><button style=\"width:33.3%\" >Shut down</button></a></p>";
+  _html += "<p><a href=\"/button1\"><button style=\"width:33.3%";
+  if (set == 1)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\" >Piscar</button></a></p>";
+
+  _html += "<p><a href=\"/button2\"><button style=\"width:33.3%";
+  if(set == 2)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\" >Fade</button></a></p>";
+
+  _html += "<p><a href=\"/buttonN14\"><button style=\"width:33.3%";
+  if(nightMode)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\" >Sleep LED</button></a></p>";
 
   if (nightMode)
   {
@@ -487,15 +544,17 @@ String all_html ()
     {
       int h = 0, mi = 0, s = 0, aux = 0;
 
-      //nao sei ainda
+      s = (tempo_max - tempo_left) / 1000;
+      mi = int(s/60);
 
-      // _html += String(h);
-      // _html += "H ";
-      // _html += String(mi);
-      // _html += "Min ";
-      // _html += String(s);
-      // _html += "s ";
-      _html += "time left: " + String((tempo_max - tempo_left) / 1000) + "s";
+      Serial.print("mi: "); Serial.print(mi);
+      Serial.print(" ss: "); Serial.print(s);
+
+      s = (s/60 - mi)*60;
+
+      Serial.print(" s: "); Serial.println(s);
+
+      _html += "time left: " + String(mi) + " min ";// + String(s) + " s";
 
       // Serial.print("hour: ");
       // Serial.print(h);
@@ -509,6 +568,17 @@ String all_html ()
   }
   else
     _html += "<p></p>";
+
+
+  _html += "<p><a href=\"/buttonN15\"><button style=\"width:33.3%";
+  if(good_morning)
+  {
+    _html += ";background-color: #6d912a;";
+  }
+  _html += "\">Morning</button></a></p>";
+
+  _html += "<p><a href=\"/buttonN16\"><button style=\"width:33.3%\" >On/OFF rele </button></a></p>";
+  _html += "<p><a href=\"/buttonN17\"><button style=\"width:33.3%\" >shunt down rele</button></a></p>";
 
   _html += "</div>";
 
@@ -613,6 +683,7 @@ String all_html ()
 }
 
 
+
 void fade (int del)
 {
   Serial.println("primeiro for");
@@ -667,6 +738,8 @@ bool breck_for ()
 
 void combination ()
 {
+  shotdowm_led();
+
   digitalWrite(led_red, HIGH);
   wifi();
   delay(500);
@@ -685,8 +758,6 @@ void combination ()
   digitalWrite(led_gre, LOW);
   wifi();
   delay(500);
-
-  shotdowm_led();
 }
 
 void cores_RGB (int R_aux, int G_aux, int B_aux)
@@ -765,12 +836,12 @@ void shotdowm_led()
 
 void shunt_down_time ()
 {
-  Serial.println("esta entrando aqui");
+  delay(100);
+
+  tempo_left = millis() - tempo_salve;
 
   Serial.print("tempo_left: ");
   Serial.println(tempo_left);
-
-  tempo_left = millis() - tempo_salve;
 
   if (tempo_max < tempo_left)
   {
@@ -797,5 +868,21 @@ void shunt_down_time ()
       shotdowm_led();
 
     Serial.println("acabooouuuuuuuuuuuuuuu");
+  }
+}
+
+void good_morning_funcion ()
+{
+  if(now.hour() == 5)
+  {
+    int _r = map(now.minute(), 0, 59, 11, 150);
+    int _g = map(now.minute(), 0, 59, 5, 150);
+    int _b = map(now.minute(), 0, 59, 20, 200);
+
+    // _r = constrain(_r, 1, 80);
+    // _g = constrain(_g, 3, 60);
+    // _b = constrain(_b, 0, 40);
+
+    cores_RGB(_r, _g, _b);
   }
 }
