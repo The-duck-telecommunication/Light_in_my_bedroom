@@ -76,12 +76,14 @@ void setup()
   pinMode(led_red, OUTPUT);
   pinMode(led_gre, OUTPUT);
   pinMode(led_blu, OUTPUT);
-  pinMode(rele_pin, OUTPUT);
+  pinMode(rele1_pin, OUTPUT);
+  pinMode(rele2_pin, OUTPUT);
 
   digitalWrite(led_red, LOW);
   digitalWrite(led_gre, LOW);
   digitalWrite(led_blu, LOW);
-  digitalWrite(rele_pin, LOW);
+  digitalWrite(rele1_pin, LOW);
+  digitalWrite(rele2_pin, LOW);
   /***end***/
 
 
@@ -106,11 +108,6 @@ void setup()
   });
   ArduinoOTA.begin();
   /***end***/
-
-  //blink nos reles
-  digitalWrite(rele_pin, HIGH);
-  delay(200);
-  digitalWrite(rele_pin, LOW);
 }
 
 void loop()
@@ -578,7 +575,7 @@ String all_html ()
   _html += "\">Morning</button></a></p>";
 
   _html += "<p><a href=\"/buttonN16\"><button style=\"width:33.3%\" >On/OFF rele </button></a></p>";
-  _html += "<p><a href=\"/buttonN17\"><button style=\"width:33.3%\" >shunt down rele</button></a></p>";
+  _html += "<p><a href=\"/buttonN17\"><button style=\"width:33.3%\" >sleep rele</button></a></p>";
 
   _html += "</div>";
 
@@ -845,14 +842,13 @@ void shunt_down_time ()
 
   if (tempo_max < tempo_left)
   {
-    if((now.hour() == 5) || (now.hour() == 6))
-    {
-      if(now.hour() == 5)
-        cores_RGB(60, 50, 30);
-      else
-        cores_RGB(150, 130, 100);
-    }
-    else if((now.hour() >= 18) && (now.hour() <= 23))
+    shotdowm_led();
+
+    Serial.println("acabooouuuuuuuuuuuuuuu");
+  }
+  else
+  {
+    if((now.hour() >= 18) && (now.hour() <= 23))
     {
       int _r = map(now.hour(), 18, 23, 80, 4);
       int _g = map(now.hour(), 18, 23, 60, 3);
@@ -864,10 +860,6 @@ void shunt_down_time ()
 
       cores_RGB(_r, _g, _b);
     }
-    else
-      shotdowm_led();
-
-    Serial.println("acabooouuuuuuuuuuuuuuu");
   }
 }
 

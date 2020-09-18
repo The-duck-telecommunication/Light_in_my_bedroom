@@ -21,6 +21,7 @@ int led_red = 13,
 int R = 100, G = 125, B = 120; //cor padrão
 
 //Pinout relés
-int rele_pin = 2;
+int rele1_pin = 2,
+    rele2_pin = 0;
 
 float tempo_max = 3600000; //1h => 3600000
